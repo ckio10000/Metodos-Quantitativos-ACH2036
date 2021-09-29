@@ -9,9 +9,9 @@ head(dataset_escolhido)
 
 # Esta funcao controi um grafico contendo as distribuicoes de frequencias
 # relativas acumuladas e de probabilidades da normal sobrepostas, para
-# critÈrio de comparaÁ„o. O eixo das ordenadas se refere ‡s distribuicoes
+# crit√©rio de compara√ß√£o. O eixo das ordenadas se refere √†s distribuicoes
 # acumuladas de 0 a 1, enquanto o eixo das abscissas se refere aos valores
-# da vari·vel variando do mÌn ou m·x entre eles.
+# da vari√°vel variando do m√≠n ou m√°x entre eles.
 
 plot_cumulative_distribution_lilliefors <- function(values_list)
 {
@@ -20,7 +20,7 @@ plot_cumulative_distribution_lilliefors <- function(values_list)
     lista_de_valores_do_atributo <- sort(lista_de_valores_do_atributo)
     # valor maximo da lista
     min_lista_valores_atributo <- min(unlist(lista_de_valores_do_atributo))
-    # valor mÌnimo da lista
+    # valor m√≠nimo da lista
     max_lista_valores_atributo <- max(unlist(lista_de_valores_do_atributo))
     # media dos valores da lista
     media_lista_valores_atributo <- mean(lista_de_valores_do_atributo)
@@ -39,8 +39,8 @@ plot_cumulative_distribution_lilliefors <- function(values_list)
     #plotagem da curva normal junto com a frequencia relativa acumulada.
     plot(ggplot(data = data.frame(x = seq(min_lista_valores_atributo, max_lista_valores_atributo)), aes(x))
          + stat_function(fun = pnorm, n = 101, args = list(mean = media_lista_valores_atributo, sd = desvio_padrao_lista_valores_atributo), linetype="longdash")
-         + ylab("DistribuiÁ„o acumulada")
-         + xlab("Valor da vari·vel")
+         + ylab("Distribui√ß√£o acumulada")
+         + xlab("Valor da vari√°vel")
          + geom_step(data = data.frame(x = lista_de_valores_do_atributo[1:length(freq_relativas_acumuladas)]), aes(x=x, y=freq_relativas_acumuladas), color="blue"))
 }
 
@@ -55,13 +55,8 @@ MRI_id<-dataset_escolhido$MRI.ID
 dataset_escolhido$Subject.ID<-NULL
 dataset_escolhido$MRI.ID<-NULL
 
-sort(apply(dataset_escolhido, 2, function(x){sum(is.na(x))}), decreasing = TRUE)
-
-table(dataset_escolhido$SES)
-
 dataset_escolhido <- dataset_escolhido[order(dataset_escolhido$Group),]
 head(dataset_escolhido)
-#df %>% group_by(MMSE) %>% arrange(Group) 
 count(dataset_escolhido, 'Group')
 
 ###############################################################
@@ -98,3 +93,12 @@ boxplot(non_demented_df$eTIV)
 
 plot_cumulative_distribution_lilliefors(log(demented_and_converted_df$nWBV))
 plot_cumulative_distribution_lilliefors(log(non_demented_df$nWBV))
+
+################################################################
+########################### Anova ##############################
+################################################################
+
+anova_one_way <- aov(nWBV~Grupo, data = dataset_escolhido)
+summary(anova_one_way)
+
+anova(aov(nWBV~Grupo, data = df))
